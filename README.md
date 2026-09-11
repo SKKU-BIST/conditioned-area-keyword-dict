@@ -7,7 +7,7 @@
 
 | 항목 | 내용 |
 |---|---|
-| 사전 버전 | v1.0.0 (사전 확정일 2026-06-08, 공개 2026-09-07) |
+| 사전 버전 | v1.1.0 (키워드 확정일 2026-06-08, 공간 이름 사전 추가 2026-09-11) |
 | 키워드 수 | 비공조 152 · 준공조 34 · (주차계열 11, 비공조의 부분집합) |
 | 매칭 방식 | 공백 제거·소문자화 후 **부분 문자열(substring)** 매칭 |
 | 우선순위 | 비공조 > 준공조 > 그 외 전부 공조 |
@@ -19,6 +19,8 @@
 | `keyword_dictionary.csv` | 배포용 표 (no, keyword, class, is_parking, match_type, priority). UTF-8(BOM) 인코딩이라 엑셀에서 바로 열립니다 |
 | `keyword_dictionary.json` | 프로그램용. `noncond`, `semi`, `parking` 키워드 목록과 메타 정보 |
 | `classify.py` | 참조 구현 (문자열 분류, 행 분해, 건물 단위 집계). 외부 의존성 없음, Python 3.8 이상 |
+| `space_name_lexicon.csv` | **공간 이름 사전** — 전국 층별개요에서 실제로 관측되어 비공조·준공조로 판정된 공간 이름 전체 (비공조 177,746 · 준공조 67,961). 이름별 매칭 키워드, 출현 행수, 면적 합 수록 |
+| `space_name_lexicon_cond.csv` | 공조로 판정된 공간 이름 199,269건 (참고용, 같은 형식) |
 | `CHANGELOG.md` | 버전 이력 |
 
 ## 분류 규칙
@@ -40,6 +42,21 @@ noncond_area = Σ noncond 토큰 면적
 ```
 
 준공조는 냉난방을 부분적·간헐적으로만 하거나(창고, 공장 등) 산업용 냉장처럼 판단이 갈리는 공간이므로, 공조면적에 합산하지 않고 별도로 집계합니다. 보수적으로 보려면 `cond_area`만, 넓게 보려면 `cond_area + semi_area`를 사용하면 됩니다.
+
+## 공간 이름 사전 (space_name_lexicon.csv)
+
+키워드 186개가 실제 데이터에서 어떤 이름에 걸렸는지 확인할 수 있도록, 전국 층별개요 20,670,074행을 토큰 단위로 분해해 관측된 고유 이름 444,976건 전부를 분류별로 정리했습니다. 키워드 사전을 검토하거나, 특정 이름이 어떻게 분류되는지 찾아볼 때 사용합니다.
+
+| 컬럼 | 내용 |
+|---|---|
+| `space_name` | 공백 제거·소문자화된 공간 이름 (괄호 면적 표기는 제거) |
+| `class` | 비공조 / 준공조 / 공조 |
+| `is_parking` | 주차 키워드 매칭 여부 |
+| `matched_keywords` | 판정에 걸린 키워드 전부 (`\|` 구분) |
+| `n_rows` | 전국 층별개요 출현 행수 |
+| `area_sum_m2` | 해당 이름 행의 면적 합 (㎡) |
+
+예를 들어 `단독주택(창고)`는 `창고` 키워드 때문에 준공조로, `계단실(연면적제외)`는 `계단`·`연면적제외` 키워드로 비공조로 분류됩니다. 부분 문자열 매칭의 한계가 드러나는 이름을 이 파일에서 찾아 사전 개선에 반영할 수 있습니다.
 
 ## 사용 예
 
@@ -80,7 +97,7 @@ df.loc[s.str.contains(rx(d["noncond"])), "cls"] = "noncond"   # 나중에 덮어
 
 ## 인용
 
-> BIST Lab, Sungkyunkwan University (2026). *Conditioned-Area Keyword Dictionary for Korean Building Register*, v1.0.0. https://github.com/SKKU-BIST/conditioned-area-keyword-dict
+> BIST Lab, Sungkyunkwan University (2026). *Conditioned-Area Keyword Dictionary for Korean Building Register*, v1.1.0. https://github.com/SKKU-BIST/conditioned-area-keyword-dict
 
 ## 라이선스
 
