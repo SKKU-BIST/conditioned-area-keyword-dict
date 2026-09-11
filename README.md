@@ -109,8 +109,8 @@ df.loc[s.str.contains(rx(d["noncond"])), "cls"] = "noncond"   # 나중에 덮어
 
 ## 인용
 
-> BIST Lab, Sungkyunkwan University (2026). *Conditioned-Area Keyword Dictionary for Korean Building Register*, v1.1.0. https://github.com/SKKU-BIST/conditioned-area-keyword-dict
+> Korea Institute of Civil Engineering and Building Technology (KICT) & BIST Lab, Sungkyunkwan University (2026). *Conditioned-Area Keyword Dictionary for Korean Building Register*, v1.1.0. https://github.com/SKKU-BIST/conditioned-area-keyword-dict
 
 ## 라이선스
 
-MIT 라이선스입니다. 저작권 표시를 유지하는 조건으로 자유롭게 사용·수정·재배포할 수 있습니다.
+BSD 3-Clause License. 저작권은 한국건설기술연구원(KICT)에 있으며(국토교통부 승인 조건), 개발은 성균관대학교 BIST Lab이 수행했습니다. 저작권 표시와 조건문을 유지하면 수정·재배포할 수 있고, 저작권자 이름을 홍보에 쓰거나 무변경 재배포 시 다른 이름을 붙이는 것은 허용되지 않습니다. 전문은 `LICENSE` 파일을 참조하십시오.
